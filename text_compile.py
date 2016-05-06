@@ -20,7 +20,7 @@ out_folder = "tc_unpack"
 splitter = ">>>>FILE>>>>"
 root_folder = __file__.replace("tc.py", "")
  
-allowed_extensions = ["py", "pt", "txt", "html", "js", "css", "sql", "sh", "hs", "ini"]
+allowed_extensions = ["py", "pt", "txt", "html", "js", "css", "sql", "sh", "hs", "ini", "md"]
 ex_search = re.compile(r"\.([a-zA-Z0-9_-]+)$")
 name_search = re.compile(r"/?([a-zA-Z0-9-_ ]+\.[a-zA-Z0-9_-]+)$")
  
@@ -62,6 +62,7 @@ def build_file(filepath):
     return ""
  
 def pack(args):
+    files = 0
     contents = []
    
     for p, f in iter_tree(args.d, lambda f: f != "tc.py"):
@@ -69,6 +70,7 @@ def pack(args):
        
         try:
             result = build_file(path)
+            files += 1
         except Exception as e:
             print("Error with file {}".format(path))
             pass
@@ -83,6 +85,8 @@ def pack(args):
         f.write("".join(contents))
    
     print("Compiled file created as tc_out.txt")
+    
+    print("Created from {} files".format(files))
    
     if len(found_extensions) > 0:
         print("Found {} extension{} not accepted: {}".format(
